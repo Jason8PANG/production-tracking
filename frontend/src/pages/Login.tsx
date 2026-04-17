@@ -13,7 +13,7 @@ function Login() {
   const [station, setStation] = useState('');
   const [sites, setSites] = useState<string[]>([]);
   const [stations, setStations] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [sitesLoading, setSitesLoading] = useState(true);
   const [stationsLoading, setStationsLoading] = useState(false);
 
