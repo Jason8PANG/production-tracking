@@ -202,10 +202,10 @@ docker-compose.yml 中已配置默认数据库连接：
 
 ```yaml
 environment:
-  - DB_HOST=10.0.6.86      # MySQL 主机地址
+  - DB_HOST=0.0.0.0      # MySQL 主机地址
   - DB_PORT=33306           # MySQL 端口
   - DB_USER=root            # 数据库用户名
-  - DB_PASSWORD=root07      # 数据库密码
+  - DB_PASSWORD=xxxx      # 数据库密码
   - DB_NAME=wiptrack       # 数据库名
   - PORT=6000              # API 服务端口
 ```
