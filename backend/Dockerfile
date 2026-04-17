@@ -7,7 +7,7 @@ RUN apk add --no-cache curl
 
 # 复制 package 文件
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install
 
 # 复制源代码
 COPY . .
