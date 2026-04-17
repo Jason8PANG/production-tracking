@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # 前端服务
+  frontend:
+    build: ./frontend
+    container_name: wiptack-frontend
+    ports:
+      - "6001:6001"
+    depends_on:
+      - backend
+    networks:
+      - wiptack-network
+    restart: unless-stopped
+
+  # 后端 API 服务
+  backend:
+    build: ./backend
+    container_name: wiptack-api
+    environment:
+      - DB_HOST=10.0.6.86
+      - DB_PORT=33306
+      - DB_USER=root
+      - DB_PASSWORD=root07
+      - DB_NAME=wiptrack
+      - NODE_ENV=production
+      - PORT=6000
+    ports:
+      - "6000:6000"
+    networks:
+      - wiptack-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  wiptack-network:
+    driver: bridge

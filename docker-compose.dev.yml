@@ -1,0 +1,60 @@
+# 本地开发环境 - 包含本地 MySQL
+version: '3.8'
+
+services:
+  # 本地 MySQL 数据库
+  mysql-local:
+    image: mysql:8.0
+    container_name: wiptack-mysql-local
+    environment:
+      - MYSQL_ROOT_PASSWORD=root07
+      - MYSQL_DATABASE=wiptrack
+    ports:
+      - "33306:3306"
+    volumes:
+      - mysql-local-data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - wiptack-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 后端 API 服务
+  backend:
+    build: ./backend
+    container_name: wiptack-api
+    environment:
+      - DB_HOST=mysql-local
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=root07
+      - DB_NAME=wiptrack
+      - NODE_ENV=development
+    ports:
+      - "5001:5000"
+    depends_on:
+      mysql-local:
+        condition: service_healthy
+    networks:
+      - wiptack-network
+
+  # 前端服务
+  frontend:
+    build: ./frontend
+    container_name: wiptack-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - wiptack-network
+
+networks:
+  wiptack-network:
+    driver: bridge
+
+volumes:
+  mysql-local-data:
