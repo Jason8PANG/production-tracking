@@ -12,6 +12,9 @@ RUN npm install
 # 复制源代码
 COPY . .
 
+# 编译 TypeScript
+RUN npm run build
+
 # 暴露端口
 EXPOSE 6000
 
